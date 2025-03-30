@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat with {{ model_name }}</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.5s ease forwards;
+        }
+    </style>
+</head>
+<body class="bg-gray-100">
+
+<div class="container mx-auto px-4 py-8">
+    <h1 class="text-3xl font-bold mb-4">Chat with {{ model_name }}</h1>
+    <div id="chat-log" class="h-[400px] overflow-y-auto p-4 bg-white rounded-lg shadow-md border border-gray-200"></div>
+
+    <form id="chat-form" class="mt-4 flex">
+        <input type="text" id="message-input" class="flex-grow px-4 py-2 border border-gray-300 rounded-l-lg focus:outline-none focus:ring-2 focus:ring-blue-600" placeholder="Your message...">
+        <button type="submit" id="send-button" class="px-6 py-2 bg-blue-600 text-white rounded-r-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-600">Send</button>
+    </form>
+</div>
+
+<script>
+    const modelName = "{{ model_name }}";
+    const chatLog = document.getElementById('chat-log');
+    const messageInput = document.getElementById('message-input');
+    const chatForm = document.getElementById('chat-form');
+
+    const ws = new WebSocket('ws://' + window.location.host + '/ws/chat/' + modelName + '/');
+
+    let thinkingMessage = null; // Переменная для хранения сообщения "Думаю..."
+
+    function addMessage(message, isUser, isThinking = false) {
+        const messageDiv = document.createElement('div');
+        messageDiv.classList.add(isUser ? 'text-right' : 'text-left', 'mb-2', 'fade-in'); // Добавляем класс fade-in
+        messageDiv.innerHTML = `<div class="${isUser ? 'bg-blue-200' : 'bg-gray-200'} inline-block rounded-lg p-2 max-w-[70%]">${message}</div>`;
+
+        if (isThinking) {
+            thinkingMessage = messageDiv; // Сохраняем ссылку на сообщение "Думаю..."
+            chatLog.appendChild(messageDiv); // Добавляем сообщение в чат
+        } else if (thinkingMessage) {
+            chatLog.replaceChild(messageDiv, thinkingMessage); // Заменяем "Думаю..." на ответ
+            thinkingMessage = null; // Очищаем переменную
+        } else {
+            chatLog.appendChild(messageDiv); // Добавляем обычное сообщение
+        }
+
+        chatLog.scrollTop = chatLog.scrollHeight; // Прокрутка вниз
+    }
+
+    chatForm.onsubmit = function(event) {
+        event.preventDefault();
+        const message = messageInput.value;
+        if (message.trim() !== "") {
+            addMessage(message, true);
+            ws.send(JSON.stringify({ message: message }));
+            messageInput.value = '';
+        }
+    };
+
+    ws.onmessage = function(event) {
+        const data = JSON.parse(event.data);
+        addMessage(data.message, false, data.is_thinking); // Передаем флаг is_thinking
+    };
+
+    // Загрузка истории сообщений (реализация на стороне backend)
+    // fetch('/chat_history/' + modelName + '/')
+    //     .then(response => response.json())
+    //     .then(data => {
+    //         data.forEach(item => addMessage(item.message, item.is_user));
+    //     });
+
+</script>
+
+</body>
+</html>
