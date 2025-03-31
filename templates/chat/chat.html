@@ -26,7 +26,15 @@
 
 <div class="container mx-auto px-4 py-8">
     <h1 class="text-3xl font-bold mb-4">Chat with {{ model_name }}</h1>
-    <div id="chat-log" class="h-[400px] overflow-y-auto p-4 bg-white rounded-lg shadow-md border border-gray-200"></div>
+    <div id="chat-log" class="h-[400px] overflow-y-auto p-4 bg-white rounded-lg shadow-md border border-gray-200">
+        {% for message in messages %}
+            <div class="{% if message.role == 'user' %}text-right{% else %}text-left{% endif %} mb-2">
+                <div class="{% if message.role == 'user' %}bg-blue-200{% else %}bg-gray-200{% endif %} inline-block rounded-lg p-2 max-w-[70%]">
+                    {{ message.content }} </div>
+                </div>
+        {% endfor %}
+    </div>
+
 
     <form id="chat-form" class="mt-4 flex">
         <input type="text" id="message-input" class="flex-grow px-4 py-2 border border-gray-300 rounded-l-lg focus:outline-none focus:ring-2 focus:ring-blue-600" placeholder="Your message...">
@@ -77,12 +85,12 @@
         addMessage(data.message, false, data.is_thinking); // Передаем флаг is_thinking
     };
 
-    // Загрузка истории сообщений (реализация на стороне backend)
-    // fetch('/chat_history/' + modelName + '/')
-    //     .then(response => response.json())
-    //     .then(data => {
-    //         data.forEach(item => addMessage(item.message, item.is_user));
-    //     });
+    function scrollToBottom() {
+        let objDiv = document.getElementById("chat-log");
+        objDiv.scrollTop = objDiv.scrollHeight;
+    }
+
+    scrollToBottom();
 
 </script>
 

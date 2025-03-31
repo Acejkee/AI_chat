@@ -1,0 +1,32 @@
+[
+    {
+        "model": "chat.aimodel",
+        "pk": 1,
+        "fields": {
+            "name": "Qwen: Qwen2.5 VL 3B Instruct",
+            "model": "qwen/qwen2.5-vl-3b-instruct:free",
+            "description": "Qwen: Qwen2.5 VL 3B Instruct",
+            "image": "model_images/image1.jpg"
+        }
+    },
+    {
+        "model": "chat.aimodel",
+        "pk": 2,
+        "fields": {
+            "name": "DeepSeek: DeepSeek V3 Base",
+            "model": "deepseek/deepseek-v3-base:free",
+            "description": "DeepSeek: DeepSeek V3 Base",
+            "image": "model_images/image2.jpg"
+        }
+    },
+    {
+        "model": "chat.aimodel",
+        "pk": 3,
+        "fields": {
+            "name": "Bytedance: UI-TARS 72B",
+            "model": "bytedance-research/ui-tars-72b:free",
+            "description": "Bytedance: UI-TARS 72B",
+            "image": "model_images/image3.jpg"
+        }
+    }
+]
