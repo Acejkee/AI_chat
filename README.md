@@ -1,8 +1,8 @@
 # AI Chatbot Web Application
 
-![Иллюстрация к проекту](https://github.com/Acejkee/images/raw/main/ai_chat/models.png)
+![Иллюстрация к проекту](https://github.com/Acejkee/images/blob/main/AI_chat/models.png)
 
-![Иллюстрация к проекту](https://github.com/Acejkee/images/raw/main/ai_chat/chat.png)
+![Иллюстрация к проекту](https://github.com/Acejkee/images/blob/main/AI_chat/chat.png)
 
 Это веб-приложение для использования чат-ботов на базе искусственного интеллекта. Оно разработано с использованием современных технологий и инструментов, чтобы обеспечить высокую производительность и удобство.
 
